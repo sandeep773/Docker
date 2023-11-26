@@ -1,0 +1,29 @@
+To backup your Docker registry, you can follow these steps:
+
+1. **Export the registry data**: You can use the `docker save` command to export the registry data to a tar file. For example, the following command exports the registry data to a file named `registry.tar`: 
+
+    ```
+    docker save -o registry.tar registry:2
+    ```
+
+    This command exports the `registry:2` image to a tar file named `registry.tar`.
+
+2. **Copy the tar file to a safe location**: Once you have exported the registry data, you should copy the tar file to a safe location, such as an external hard drive or a cloud storage service.
+
+3. **Import the registry data**: To import the registry data, you can use the `docker load` command. For example, the following command imports the registry data from the `registry.tar` file:
+
+    ```
+    docker load -i registry.tar
+    ```
+
+    This command imports the registry data from the `registry.tar` file.
+
+Please note that these steps only backup the registry data and not the container itself. To backup the container, you can use the `docker commit` command to create a new image from the container's file system. You can then use this image to create a new container. However, this method is not recommended as it may result in data loss.
+
+I hope this helps!
+
+Source: Conversation with Bing, 26/11/2023
+(1) How to locally backup the images of a local Docker-registry?. https://stackoverflow.com/questions/67028514/how-to-locally-backup-the-images-of-a-local-docker-registry.
+(2) How to back up and restore your Docker Desktop data. https://docs.docker.com/desktop/backup-and-restore/.
+(3) How to backup and restore a Docker Container? - Online Tutorials Library. https://www.tutorialspoint.com/how-to-backup-and-restore-a-docker-container.
+(4) How to backup Docker containers? Docker volume backup methods. https://www.baculasystems.com/blog/docker-backup-containers/.
