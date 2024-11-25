@@ -1,0 +1,35 @@
+FROM amazoncorretto:21
+
+
+RUN mkdir -p /var/install/zaakpay
+
+WORKDIR /opt/app/
+
+##newrelic
+RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip
+#RUN yum update -y && 
+RUN yum install unzip -y
+RUN unzip newrelic-java.zip
+COPY newrelic.yml /opt/app/newrelic/newrelic.yml
+RUN chmod 777 -R /opt/app/newrelic
+
+########################### Json Log
+# RUN yum install wget -y
+# RUN wget https://raw.githubusercontent.com/fluent/fluent-bit/master/install.sh
+# RUN chmod +x install.sh
+# RUN bash install.sh
+# COPY fluent-bit.sh /opt/fluent-bit.sh
+# RUN chmod +x /opt/fluent-bit.sh
+# COPY fluent-bit.conf /etc/fluent-bit/fluent-bit.conf
+# CMD ["/opt/fluent-bit.sh"]
+
+
+ADD config /var/install/zaakpay/config
+COPY target/ROOT.jar /var/install/zaakpay/
+# EXPOSE 8080
+# VOLUME ["/opt/app/logs"]
+
+COPY run-newrelic.sh .
+RUN chmod 0500 run-newrelic.sh
+CMD [ "sh", "run-newrelic.sh" ]
+
