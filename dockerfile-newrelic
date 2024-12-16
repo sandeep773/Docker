@@ -1,0 +1,23 @@
+FROM amazoncorretto:22
+
+#ENV JAVA_OPTS="-Xms2048m -Xmx2048m -d64 -XX:+UseCompressedOops -Dhttp.maxConnections=256 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath="/opt/app/logs/heap/heap-OOMHeapExample.bin" -XX:ErrorFile="/opt/app/logs/error.txt" -Dmobikwik_home="/var/install/mobikwik/" -XX:+UseConcMarkSweepGC -Xloggc:/opt/app/logs/gc-1.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCCause -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=5M -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:FlightRecorderOptions=defaultrecording=true,dumponexit=true,dumponexitpath=/usr/local/tomcat/logs/,disk=true,maxage=7d,maxsize=2G,repository=/opt/app/logs/"
+
+
+RUN mkdir -p /var/install/zaakpay/config
+WORKDIR /opt/app/
+#ADD config /var/install/zaakpay/config
+#COPY target/ROOT.jar /var/install/zaakpay/
+COPY target/zaakpay-lead-service-0.0.1.jar /var/install/zaakpay/
+EXPOSE 8080
+##newrelic
+RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip
+RUN yum update -y && yum install unzip -y
+RUN unzip newrelic-java.zip
+COPY newrelic.yml /opt/app/newrelic/newrelic.yml
+RUN chmod 777 -R /opt/app/newrelic
+#VOLUME ["/opt/app/logs"]
+
+COPY newrelic.sh .
+RUN chmod 0500 newrelic.sh
+CMD [ "sh", "newrelic.sh" ]
+
